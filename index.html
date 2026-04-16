@@ -76,13 +76,19 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        // ১. লিঙ্ক থেকে রেফার কোড নিয়ে বক্সে বসানো
         window.onload = function() {
             const params = new URLSearchParams(window.location.search);
             const ref = params.get('ref');
             if(ref) document.getElementById('invite').value = ref.trim();
         };
 
-        document.getElementById('regForm').onsubmit = function(e) {
+        // ২. র‍্যান্ডম ৬ ডিজিটের ইউনিক কোড তৈরি করার ফাংশন
+        function generateRandomReferCode() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
+
+        document.getElementById('regForm').onsubmit = async function(e) {
             e.preventDefault();
 
             var phone = document.getElementById('phone').value.trim();
@@ -94,27 +100,31 @@
                 return false;
             }
 
-            db.ref('users/' + phone).once('value').then((snapshot) => {
-                if (snapshot.exists()) {
-                    alert("এই নম্বর দিয়ে আগেই অ্যাকাউন্ট খোলা হয়েছে!");
-                } else {
-                    // এখানে ইউজারের জন্য একটি ইউনিক অটো রেফার কোড তৈরি করা হচ্ছে (যেমন: REF5678)
-                    var myGeneratedCode = "REF" + phone.substring(7); 
+            // ইউজার আগে থেকেই আছে কি না চেক
+            const userSnap = await db.ref('users/' + phone).once('value');
+            if (userSnap.exists()) {
+                alert("এই নম্বর দিয়ে আগেই অ্যাকাউন্ট খোলা হয়েছে!");
+                return;
+            }
 
-                    db.ref('users/' + phone).set({
-                        phone: String(phone),      
-                        password: String(pass),
-                        referCode: String(invite), 
-                        myReferCode: myGeneratedCode, // এই কোডটিই অন্য কেউ রেফার হিসেবে ব্যবহার করবে
-                        balance: 150,              
-                        planActive: "false",       
-                        joinedAt: new Date().toLocaleString()
-                    }).then(() => {
-                        localStorage.setItem('userPhone', phone);
-                        alert("নিবন্ধন সফল! আপনার রেফার কোড: " + myGeneratedCode);
-                        window.location.href = "login.html"; 
-                    });
-                }
+            // একটি ইউনিক ৬ ডিজিটের কোড নিশ্চিত করা
+            let myGeneratedCode = generateRandomReferCode();
+            
+            // ডাটা সেভ করা
+            db.ref('users/' + phone).set({
+                phone: String(phone),      
+                password: String(pass),
+                referCode: String(invite), 
+                myReferCode: myGeneratedCode, 
+                balance: 150,              
+                planActive: "false",       
+                joinedAt: new Date().toLocaleString()
+            }).then(() => {
+                localStorage.setItem('userPhone', phone);
+                alert("নিবন্ধন সফল! আপনার রেফার কোড: " + myGeneratedCode);
+                window.location.href = "login.html"; 
+            }).catch((error) => {
+                alert("Error: " + error.message);
             });
         };
     </script>
