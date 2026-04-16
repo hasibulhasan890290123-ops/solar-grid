@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>গ্রাহক সহায়তা - Support</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --gold: #fcc419; 
+            --electric-blue: #007bff;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --text-color: #eee;
+            --border-color: #333;
+        }
+        
+        body { 
+            font-family: 'Hind Siliguri', sans-serif; 
+            background-color: var(--dark-bg); 
+            color: var(--text-color); 
+            margin: 0;
+            background-image: radial-gradient(circle at 50% 0%, #1a3a5a 0%, var(--dark-bg) 100%);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header { 
+            display: flex; align-items: center; padding: 15px; 
+            border-bottom: 1px solid var(--border-color); 
+            background: rgba(10, 10, 10, 0.9);
+        }
+        .back-btn { text-decoration: none; color: var(--gold); font-size: 20px; margin-right: 15px; }
+        .header-title { font-size: 18px; font-weight: bold; flex: 1; text-align: center; margin-right: 35px; }
+
+        .container { padding: 30px 20px; text-align: center; }
+
+        .support-icon {
+            width: 80px; height: 80px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px var(--electric-blue));
+        }
+
+        h2 { color: var(--gold); margin-bottom: 10px; font-size: 22px; }
+        p { color: #aaa; font-size: 14px; margin-bottom: 30px; }
+
+        .support-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .support-card:active { transform: scale(0.95); background: #222; }
+
+        .tg-logo { width: 40px; height: 40px; margin-right: 15px; }
+        .admin-info { text-align: left; }
+        .admin-name { font-weight: bold; font-size: 16px; color: var(--gold); }
+        .admin-desc { font-size: 12px; color: #888; }
+
+        .notice {
+            margin-top: 40px;
+            font-size: 12px;
+            color: #777;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="profile.html" class="back-btn">❮</a>
+        <div class="header-title">গ্রাহক সহায়তা</div>
+    </div>
+
+    <div class="container">
+        <img src="https://cdn-icons-png.flaticon.com/512/1034/1034022.png" class="support-icon">
+        <h2>আপনার কি সাহায্য প্রয়োজন?</h2>
+        <p>যেকোনো সমস্যায় আমাদের অফিশিয়াল অ্যাডমিনদের সাথে সরাসরি টেলিগ্রামে যোগাযোগ করুন।</p>
+
+        <a href="https://t.me/Suppurt1admin" target="_blank" class="support-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" class="tg-logo">
+            <div class="admin-info">
+                <div class="admin-name">অ্যাডমিন - ১ (সাপোর্ট সেন্টার)</div>
+                <div class="admin-desc">টেলিগ্রামে কথা বলতে এখানে ক্লিক করুন</div>
+            </div>
+        </a>
+
+        <a href="https://t.me/Suppurt2admin" target="_blank" class="support-card">
+            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" class="tg-logo">
+            <div class="admin-info">
+                <div class="admin-name">অ্যাডমিন - ২ (জরুরি সহায়তা)</div>
+                <div class="admin-desc">টেলিগ্রামে মেসেজ দিতে এখানে ক্লিক করুন</div>
+            </div>
+        </a>
+
+        <div class="notice">
+            <b>নোটিশ:</b> আমাদের সাপোর্ট টিম প্রতিদিন সকাল ১০টা থেকে রাত ১০টা পর্যন্ত সক্রিয় থাকে। সঠিক তথ্য দিয়ে সহযোগিতা করুন।
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ভোল্টেজ উত্তোলন - Withdraw</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --gold: #fcc419; 
+            --electric-blue: #007bff;
+            --dark-bg: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --text-color: #eee;
+            --border-color: #333;
+        }
+        
+        body { 
+            font-family: 'Hind Siliguri', sans-serif; 
+            background-color: var(--dark-bg); 
+            color: var(--text-color); 
+            margin: 0; padding-bottom: 30px;
+        }
+
+        .header { 
+            display: flex; align-items: center; padding: 15px; 
+            border-bottom: 1px solid var(--border-color); 
+            background: rgba(10, 10, 10, 0.9);
+        }
+        .back-btn { text-decoration: none; color: var(--gold); font-size: 20px; margin-right: 15px; }
+        .header-title { font-size: 18px; font-weight: bold; flex: 1; text-align: center; margin-right: 35px; }
+
+        .container { padding: 20px; }
+
+        .balance-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #002d5a 100%);
+            padding: 20px; border-radius: 15px; border: 1px solid var(--electric-blue);
+            text-align: center; margin-bottom: 25px;
+        }
+        .bal-amount { font-size: 28px; font-weight: bold; color: var(--gold); }
+
+        .input-group { margin-bottom: 20px; }
+        .input-label { display: block; margin-bottom: 10px; font-size: 15px; color: #ccc; }
+        
+        select, .amount-input {
+            width: 100%; background: var(--card-bg); border: 1px solid var(--border-color);
+            padding: 15px; border-radius: 10px; color: white; font-size: 16px; outline: none;
+            box-sizing: border-box; margin-bottom: 15px;
+        }
+
+        .saved-info {
+            background: rgba(0, 123, 255, 0.1);
+            padding: 15px; border-radius: 10px; border: 1px dashed var(--electric-blue);
+            margin-bottom: 20px; display: none;
+        }
+
+        .withdraw-btn {
+            width: 100%; background: var(--gold); color: #000; border: none;
+            padding: 15px; border-radius: 10px; font-size: 18px; font-weight: bold;
+            cursor: pointer; transition: 0.3s;
+        }
+        
+        .rules-box {
+            background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 10px;
+            margin-top: 30px; font-size: 13px; color: #aaa; border-left: 3px solid var(--gold);
+        }
+
+        .history-container { margin-top: 30px; }
+        .history-card { 
+            background: var(--card-bg); padding: 12px; border-radius: 8px; 
+            margin-bottom: 10px; border: 1px solid #222; display: flex; 
+            justify-content: space-between; align-items: center;
+        }
+        .status-pending { color: #ffa500; font-weight: bold; }
+        .status-completed { color: #00ff00; font-weight: bold; }
+        .status-cancelled { color: #ff4444; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="profile.html" class="back-btn">❮</a>
+        <div class="header-title">ভোল্টেজ উত্তোলন</div>
+    </div>
+
+    <div class="container">
+        <div class="balance-card">
+            <div style="font-size: 14px; color: #aaa;">উত্তোলনযোগ্য ভোল্টেজ</div>
+            <div class="bal-amount" id="userBalanceDisplay">লোড হচ্ছে...</div>
+        </div>
+
+        <div id="setupSection">
+            <div class="input-group">
+                <label class="input-label">পেমেন্ট মেথড</label>
+                <select id="method">
+                    <option value="bKash">বিকাশ (bKash)</option>
+                    <option value="Nagad">নগদ (Nagad)</option>
+                </select>
+
+                <label class="input-label">আপনার পেমেন্ট নম্বর দিন (স্থায়ী)</label>
+                <input type="number" id="pNumber" class="amount-input" placeholder="017XXXXXXXX">
+                <p style="font-size: 11px; color: #ff4444; margin-top: -10px;">*এই নম্বরটি পরবর্তীতে আর পরিবর্তন করা যাবে না।</p>
+            </div>
+        </div>
+
+        <div id="savedSection" class="saved-info">
+            <div style="font-size: 13px; color: var(--electric-blue);">আপনার সেট করা পেমেন্ট নম্বর:</div>
+            <div id="displayInfo" style="font-size: 18px; font-weight: bold; margin-top: 5px; color: white;"></div>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">উত্তোলনের পরিমাণ (৳)</label>
+            <input type="number" id="wAmount" class="amount-input" placeholder="সর্বনিম্ন ১১০">
+        </div>
+
+        <button class="withdraw-btn" onclick="processWithdraw()">উত্তোলন রিকোয়েস্ট পাঠান</button>
+
+        <div class="rules-box">
+            <strong style="color: var(--gold);">লিমিট ও শর্তাবলী:</strong><br>
+            * সর্বনিম্ন উত্তোলন: ৳ ১১০<br>
+            * একবার নম্বর সেট করলে তা আর পরিবর্তনযোগ্য নয়।<br>
+            * চার্জ: ৫% গ্রিড মেইনটেইনেন্স ফি।
+        </div>
+
+        <div class="history-container" id="withdrawHistory">
+            <h4 style="color: var(--gold); border-bottom: 1px solid #222; padding-bottom: 5px;">উত্তোলন ইতিহাস</h4>
+            <div id="historyList" style="font-size: 13px; color: #888; text-align: center; padding: 20px;">
+                কোনো ইতিহাস পাওয়া যায়নি।
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyANWxCdWbcybuY60iSiNYtFfzY8zHKQCmE",
+            authDomain: "biddut-grid-2a476.firebaseapp.com",
+            databaseURL: "https://biddut-grid-2a476-default-rtdb.firebaseio.com",
+            projectId: "biddut-grid-2a476",
+            appId: "1:598209087772:web:400dae852569f1b27a52d9"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+
+        const userPhone = localStorage.getItem('userPhone');
+        let currentBalance = 0;
+
+        if (userPhone) {
+            db.ref('users/' + userPhone).on('value', (snap) => {
+                if (snap.exists()) {
+                    const userData = snap.val();
+                    currentBalance = userData.balance !== undefined ? parseFloat(userData.balance) : 150;
+
+                    const balElement = document.getElementById('userBalanceDisplay');
+                    if (balElement) {
+                        balElement.innerText = "৳ " + currentBalance.toFixed(2);
+                    }
+
+                    const setupSec = document.getElementById('setupSection');
+                    const savedSec = document.getElementById('savedSection');
+                    const displayInfo = document.getElementById('displayInfo');
+
+                    if (userData.pMethod && userData.pNumber) {
+                        if (setupSec) setupSec.style.display = 'none';
+                        if (savedSec) savedSec.style.display = 'block';
+                        if (displayInfo) displayInfo.innerText = userData.pMethod + " - " + userData.pNumber;
+                        
+                        localStorage.setItem('locked_method', userData.pMethod);
+                        localStorage.setItem('locked_number', userData.pNumber);
+                    }
+                }
+            });
+
+            db.ref('withdraw_requests').orderByChild('phone').equalTo(userPhone).on('value', (snap) => {
+                const historyList = document.getElementById('historyList');
+                if (snap.exists()) {
+                    let html = "";
+                    snap.forEach((child) => {
+                        const data = child.val();
+                        let statusLabel = "";
+                        let statusClass = "";
+
+                        if (data.status === 'Pending') {
+                            statusLabel = "পেন্ডিং";
+                            statusClass = "status-pending";
+                        } else if (data.status === 'Cancelled' || data.status === 'Rejected') {
+                            statusLabel = "বাতিল";
+                            statusClass = "status-cancelled";
+                        } else {
+                            statusLabel = "সফল";
+                            statusClass = "status-completed";
+                        }
+
+                        html = `
+                            <div class="history-card">
+                                <div>
+                                    <div style="color:white">৳ ${data.amount}</div>
+                                    <div style="font-size:10px">${data.time}</div>
+                                </div>
+                                <div class="${statusClass}">${statusLabel}</div>
+                            </div>
+                        ` + html;
+                    });
+                    historyList.innerHTML = html;
+                }
+            });
+        }
+
+        function processWithdraw() {
+            const amountInput = document.getElementById('wAmount').value;
+            const amount = parseFloat(amountInput);
+            const lockedNum = localStorage.getItem('locked_number');
+            const lockedMethod = localStorage.getItem('locked_method');
+
+            // আইডি অ্যাক্টিভেশন চেক লজিক
+            db.ref('users/' + userPhone).once('value', (snapshot) => {
+                const userData = snapshot.val();
+                
+                if (!userData.planActive || userData.planActive === "none") {
+                    alert("⚠️ আপনার আইডিটি বর্তমানে নিষ্ক্রিয়। টাকা উত্তোলন করতে হলে আগে একটি প্ল্যান কিনে আইডি অ্যাক্টিভ করুন।");
+                    return;
+                }
+
+                if (!lockedNum) {
+                    const pNum = document.getElementById('pNumber').value;
+                    const pMethod = document.getElementById('method').value;
+                    if (!pNum || pNum.length < 11) {
+                        alert("দয়া করে সঠিক ১১ ডিজিটের নম্বর দিন!");
+                        return;
+                    }
+
+                    db.ref('users/' + userPhone).update({
+                        pMethod: pMethod,
+                        pNumber: pNum
+                    }).then(() => {
+                        alert("নম্বর সফলভাবে লক হয়েছে!");
+                        location.reload();
+                    });
+                    return;
+                }
+
+                if (!amountInput || amount < 110) {
+                    alert("সর্বনিম্ন ১১০ টাকা উত্তোলন করতে পারবেন।");
+                    return;
+                }
+
+                if (amount > currentBalance) {
+                    alert("আপনার ব্যালেন্স পর্যাপ্ত নয়!");
+                    return;
+                }
+
+                const newBalance = currentBalance - amount;
+                db.ref('users/' + userPhone).update({ balance: newBalance }).then(() => {
+                    db.ref('withdraw_requests').push({
+                        phone: userPhone,
+                        amount: amount,
+                        targetNumber: lockedNum,
+                        method: lockedMethod,
+                        status: "Pending",
+                        time: new Date().toLocaleString()
+                    }).then(() => {
+                        alert("৳" + amount + " উত্তোলনের রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে!");
+                    });
+                });
+            });
+        }
+    </script>
+</body>
+</html>

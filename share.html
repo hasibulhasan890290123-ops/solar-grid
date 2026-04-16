@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>গ্রিড শেয়ার - SOLAR POWER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dark-bg: #0a0a0a;
+            --gold: #fcc419;
+            --card-bg: #161616;
+            --border: #333;
+        }
+
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--dark-bg);
+            color: #fff;
+            margin: 0;
+            text-align: center;
+        }
+
+        .header {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            background: #000;
+        }
+        .back-link { text-decoration: none; color: var(--gold); font-size: 24px; margin-right: 15px; }
+        .header-title { color: var(--gold); font-size: 18px; font-weight: bold; }
+
+        .share-container { padding: 30px 20px; }
+        
+        .qr-placeholder {
+            width: 150px;
+            height: 150px;
+            background: #fff;
+            margin: 0 auto 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid var(--gold);
+        }
+        .qr-placeholder img { width: 130px; }
+
+        h2 { color: var(--gold); font-size: 22px; margin-bottom: 10px; }
+        p { color: #aaa; font-size: 14px; line-height: 1.6; padding: 0 20px; }
+
+        .link-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 25px 0;
+            word-break: break-all;
+            font-family: monospace;
+            color: #007bff;
+            font-size: 13px;
+        }
+
+        .copy-btn {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(252, 196, 25, 0.3);
+            width: 80%;
+        }
+
+        .refer-info {
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(252, 196, 25, 0.05);
+            border-radius: 10px;
+            border: 1px dashed var(--gold);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="profile.html" class="back-link">❮</a> 
+        <div class="header-title">গ্রিড শেয়ার করে আয় করুন</div>
+    </div>
+
+    <div class="share-container">
+        <div class="qr-placeholder" id="qrCodeBox">
+            <img id="qrImg" src="" alt="QR Code">
+        </div>
+
+        <h2>বন্ধুদের আমন্ত্রণ জানান</h2>
+        <p>আপনার রেফারেল লিঙ্কটি শেয়ার করুন এবং আপনার গ্রিডে নতুন মেম্বার যুক্ত হলে বোনাস কমিশন পান।</p>
+
+        <div class="link-box" id="shareLink">
+            https://my-electric-grid.netlify.app/?ref=<span id="refId">...</span>
+        </div>
+
+        <button class="copy-btn" onclick="copyFullLink()">লিঙ্ক কপি করুন</button>
+
+        <div class="refer-info">
+            <div style="font-size: 12px; color: #888;">আপনার ইনভাইট কোড</div>
+            <div id="myCode" style="font-size: 20px; font-weight: bold; color: var(--gold);">------</div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            let userPhone = localStorage.getItem('userPhone') || localStorage.getItem('loggedInUser');
+            let savedReferCode = localStorage.getItem('referCode_' + userPhone);
+            const siteURL = "my-electric-grid.netlify.app";
+            
+            if (savedReferCode) {
+                document.getElementById('myCode').innerText = savedReferCode;
+                document.getElementById('refId').innerText = savedReferCode;
+                
+                // লিঙ্ক অনুযায়ী QR কোড আপডেট
+                let fullLink = `https://${siteURL}/?ref=${savedReferCode}`;
+                document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${fullLink}`;
+            } else {
+                document.getElementById('myCode').innerText = "Login Required";
+                document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://${siteURL}`;
+            }
+        };
+
+        function copyFullLink() {
+            let linkText = document.getElementById('shareLink').innerText;
+            navigator.clipboard.writeText(linkText).then(() => {
+                alert("আপনার আমন্ত্রণ লিঙ্ক কপি হয়েছে!\nসবার সাথে শেয়ার করুন।");
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>রেকর্ডস - ELECTRICITY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-black: #0a0a0a;
+            --card-gray: #161616;
+            --gold-primary: #ffcc00;
+            --text-gray: #a0a0a0;
+        }
+
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: var(--bg-black);
+            color: #ffffff;
+            margin: 0;
+            padding-bottom: 90px;
+        }
+
+        .header {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            background: #000;
+            border-bottom: 1px solid #222;
+        }
+        .back-link {
+            text-decoration: none;
+            color: var(--gold-primary);
+            font-size: 24px;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .header-title {
+            color: var(--gold-primary);
+            font-size: 18px;
+            font-weight: bold;
+            flex: 1;
+        }
+
+        .tabs {
+            display: flex;
+            margin: 15px;
+            background: #111;
+            border-radius: 8px;
+            border: 1px solid #333;
+            overflow: hidden;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px 0;
+            font-size: 14px;
+            color: var(--text-gray);
+            cursor: pointer;
+        }
+        .tab.active {
+            background: var(--gold-primary);
+            color: #000;
+            font-weight: bold;
+        }
+
+        .container { padding: 0 15px; }
+
+        .record-card {
+            background: var(--card-gray);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+            position: relative;
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+        .record-card::before {
+            content: "";
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 4px;
+            background: var(--gold-primary);
+        }
+
+        .card-header {
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid #222;
+            display: flex;
+            justify-content: space-between;
+        }
+        .plan-name { color: #fff; font-weight: bold; font-size: 15px; }
+
+        .card-body {
+            display: flex;
+            padding: 15px;
+            gap: 15px;
+            align-items: center;
+        }
+        .icon-circle {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 204, 0, 0.1);
+            border: 1px solid var(--gold-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--gold-primary);
+        }
+        .details { flex: 1; }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 4px;
+            color: var(--text-gray);
+        }
+        .info-row b { color: var(--gold-primary); }
+
+        .status-tag {
+            background: #222;
+            color: var(--gold-primary);
+            text-align: center;
+            padding: 6px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #000;
+            display: flex;
+            padding: 12px 0;
+            border-top: 1px solid #222;
+            justify-content: space-around;
+        }
+        .nav-item { text-align: center; text-decoration: none; color: #555; font-size: 11px; }
+        .nav-item.active { color: var(--gold-primary); }
+        .nav-icon { font-size: 22px; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="profile.html" class="back-link">❮</a> <div class="header-title">আমার ইনভেস্টমেন্ট রেকর্ড</div>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="openSection(event, 'active-list')">সক্রিয়</div>
+        <div class="tab" onclick="openSection(event, 'payment-history')">পেমেন্ট</div>
+    </div>
+
+    <div class="container">
+        <div id="active-list" class="tab-content" style="display: block;">
+            <div id="active-records-container">
+                <p style="text-align: center; color: #555; margin-top: 40px;">সক্রিয় কোনো প্রজেক্ট নেই</p>
+            </div>
+        </div>
+
+        <div id="payment-history" class="tab-content" style="display: none;">
+            <div id="payment-records-container">
+                <p style="text-align: center; color: #555; margin-top: 40px;">লোড হচ্ছে...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <a href="home.html" class="nav-item"><span class="nav-icon">🏠</span>হোম</a>
+        <a href="records.html" class="nav-item active"><span class="nav-icon">📋</span>রেকর্ডস</a>
+        <a href="profile.html" class="nav-item"><span class="nav-icon">👤</span>আমার</a>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyANWxCdWbcybuY60iSiNYtFfzY8zHKQCmE",
+            authDomain: "biddut-grid-2a476.firebaseapp.com",
+            databaseURL: "https://biddut-grid-2a476-default-rtdb.firebaseio.com",
+            projectId: "biddut-grid-2a476",
+            appId: "1:598209087772:web:400dae852569f1b27a52d9"
+        };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        const userPhone = localStorage.getItem('userPhone');
+
+        function openSection(evt, id) {
+            let i, content, tabs;
+            content = document.getElementsByClassName("tab-content");
+            for (i = 0; i < content.length; i++) { content[i].style.display = "none"; }
+            tabs = document.getElementsByClassName("tab");
+            for (i = 0; i < tabs.length; i++) { tabs[i].classList.remove("active"); }
+            document.getElementById(id).style.display = "block";
+            evt.currentTarget.classList.add("active");
+            
+            if(id === 'payment-history') { updatePaymentList(); }
+            if(id === 'active-list') { updateActiveList(); }
+        }
+
+        // পেমেন্ট ট্যাব আপডেট (Database থেকে deposits নোড ব্যবহার করে)
+        function updatePaymentList() {
+            const container = document.getElementById('payment-records-container');
+            db.ref('deposits').orderByChild('phone').equalTo(userPhone).on('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    let html = "";
+                    snapshot.forEach(child => {
+                        const data = child.val();
+                        // পেন্ডিং বা রিজেক্টেডগুলো পেমেন্ট ট্যাবে থাকবে
+                        if(data.status !== 'success') {
+                            let planName = data.amount == 3000 ? "বায়ু কল (৩০০০)" : "সৌর শক্তি (৩০০)";
+                            html += `
+                                <div class="record-card">
+                                    <div class="card-header"><span class="plan-name">${planName}</span><span style="font-size:11px;">${data.time}</span></div>
+                                    <div class="card-body">
+                                        <div class="icon-circle">⏳</div>
+                                        <div class="details">
+                                            <div class="info-row"><span>পরিমাণ:</span> <b>৳ ${data.amount}</b></div>
+                                            <div class="info-row"><span>TrxID:</span> <b>${data.txnId}</b></div>
+                                            <div class="info-row"><span>মেথড:</span> <b>${data.method}</b></div>
+                                        </div>
+                                    </div>
+                                    <div class="status-tag" style="color: ${data.status === 'Rejected' ? '#ff4444' : 'var(--gold-primary)'};">
+                                        ${data.status === 'Rejected' ? 'বাতিল করা হয়েছে' : 'যাচাই করা হচ্ছে...'}
+                                    </div>
+                                </div>`;
+                        }
+                    });
+                    container.innerHTML = html || '<p style="text-align:center; color:#555; margin-top:40px;">কোনো পেমেন্ট রেকর্ড নেই</p>';
+                } else {
+                    container.innerHTML = '<p style="text-align:center; color:#555; margin-top:40px;">কোনো রেকর্ড নেই</p>';
+                }
+            });
+        }
+
+        // সক্রিয় প্রজেক্ট ট্যাব আপডেট (অ্যাডমিন Approve করলে এখানে আসবে)
+        function updateActiveList() {
+            const activeContainer = document.getElementById('active-records-container');
+            db.ref('deposits').orderByChild('phone').equalTo(userPhone).on('value', (snapshot) => {
+                let html = "";
+                if (snapshot.exists()) {
+                    snapshot.forEach(child => {
+                        const data = child.val();
+                        if(data.status === 'success') { 
+                            let planName = data.amount == 3000 ? "বায়ু কল (৩০০০)" : "সৌর শক্তি (৩০০)";
+                            html += `
+                                <div class="record-card">
+                                    <div class="card-header"><span class="plan-name">${planName}</span></div>
+                                    <div class="card-body">
+                                        <div class="icon-circle">⚡</div>
+                                        <div class="details">
+                                            <div class="info-row"><span>বিনিয়োগ:</span> <b>৳ ${data.amount}</b></div>
+                                            <div class="info-row"><span>অবস্থা:</span> <b>সক্রিয়</b></div>
+                                        </div>
+                                    </div>
+                                    <div class="status-tag">প্রজেক্টটি বর্তমানে আপনার আয়ের জন্য সক্রিয়</div>
+                                </div>`;
+                        }
+                    });
+                }
+                activeContainer.innerHTML = html || '<p style="text-align:center; color:#555; margin-top:40px;">সক্রিয় কোনো প্রজেক্ট নেই</p>';
+            });
+        }
+
+        window.onload = updateActiveList;
+    </script>
+</body>
+</html>

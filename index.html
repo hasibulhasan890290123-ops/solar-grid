@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity - Royal Registration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --royal-gold: #fcc419; --deep-gold: #b8860b; --bg-black: #000000; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-black); margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; position: relative; }
+        .lightning-bg { position: absolute; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        
+        .main-box { background: rgba(15, 15, 15, 0.95); width: 100%; max-width: 360px; padding: 40px 30px; border-radius: 15px; border: 1.5px solid var(--royal-gold); box-shadow: 0 0 30px rgba(252, 196, 25, 0.2); text-align: center; z-index: 10; position: relative; }
+        .logo-box { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 30px; }
+        .logo-text { font-family: 'Cinzel', serif; font-size: 28px; font-weight: bold; background: linear-gradient(to bottom, #fff, var(--royal-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 2px; }
+        .bolt-icon { width: 25px; height: 25px; filter: drop-shadow(0 0 8px var(--royal-gold)); animation: pulse 1.5s infinite; }
+        
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes flash { 0%, 100% { opacity: 0; } 50% { opacity: 0.5; } }
+
+        .form-group { text-align: left; margin-bottom: 18px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 13px; color: var(--royal-gold); font-weight: 600; }
+        input { width: 100%; padding: 14px; background: #111; border: 1px solid #333; color: white; border-radius: 8px; font-size: 14px; outline: none; box-sizing: border-box; transition: 0.3s; }
+        input:focus { border-color: var(--royal-gold); }
+
+        .submit-btn { width: 100%; padding: 16px; background: linear-gradient(45deg, var(--deep-gold), var(--royal-gold)); border: none; color: black; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 8px; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 4px 15px rgba(252, 196, 25, 0.4); margin-top: 10px; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(252, 196, 25, 0.6); }
+
+        .footer-text { margin-top: 25px; font-size: 13px; color: #888; }
+        .footer-text a { color: #fff; text-decoration: none; border-bottom: 1px solid var(--royal-gold); padding-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+    <svg class="lightning-bg">
+        <path d="M30 0 L20 40 L40 40 L30 100" stroke="#fcc419" stroke-width="1" fill="none" style="animation: flash 3s infinite; transform: translate(15%, 10%) scale(0.4);"/>
+        <path d="M30 0 L20 40 L40 40 L30 100" stroke="#fcc419" stroke-width="1" fill="none" style="animation: flash 5s infinite; transform: translate(85%, 65%) scale(0.5) rotate(25deg);"/>
+    </svg>
+
+    <div class="main-box">
+        <div class="logo-box">
+            <svg class="bolt-icon" viewBox="0 0 24 24" fill="var(--royal-gold)"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            <div class="logo-text">ELECTRICITY</div>
+        </div>
+        
+        <form id="regForm">
+            <div class="form-group">
+                <label>মোবাইল নম্বর</label>
+                <input type="tel" id="phone" placeholder="১১ সংখ্যার নম্বর দিন" maxlength="11" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            </div>
+            <div class="form-group">
+                <label>পাসওয়ার্ড</label>
+                <input type="password" id="password" placeholder="গোপন পাসওয়ার্ড দিন" required>
+            </div>
+            <div class="form-group">
+                <label>আমন্ত্রণ কোড (ঐচ্ছিক)</label>
+                <input type="text" id="invite" placeholder="কোড থাকলে দিন">
+            </div>
+            <button type="submit" class="submit-btn">নিবন্ধন করুন</button>
+        </form>
+        <p class="footer-text">আগেই সদস্য আছেন? <a href="login.html">লগ ইন করুন</a></p>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyANWxCdWbcybuY60iSiNYtFfzY8zHKQCmE",
+            authDomain: "biddut-grid-2a476.firebaseapp.com",
+            databaseURL: "https://biddut-grid-2a476-default-rtdb.firebaseio.com",
+            projectId: "biddut-grid-2a476",
+            appId: "1:598209087772:web:400dae852569f1b27a52d9"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            const ref = params.get('ref');
+            if(ref) document.getElementById('invite').value = ref.trim();
+        };
+
+        document.getElementById('regForm').onsubmit = function(e) {
+            e.preventDefault();
+
+            var phone = document.getElementById('phone').value.trim();
+            var pass = document.getElementById('password').value.trim();
+            var invite = document.getElementById('invite').value.trim() || "None";
+
+            if(phone.length !== 11) {
+                alert("ভুল নম্বর! ১১টি সংখ্যা হতে হবে।");
+                return false;
+            }
+
+            db.ref('users/' + phone).once('value').then((snapshot) => {
+                if (snapshot.exists()) {
+                    alert("এই নম্বর দিয়ে আগেই অ্যাকাউন্ট খোলা হয়েছে!");
+                } else {
+                    // এখানে ইউজারের জন্য একটি ইউনিক অটো রেফার কোড তৈরি করা হচ্ছে (যেমন: REF5678)
+                    var myGeneratedCode = "REF" + phone.substring(7); 
+
+                    db.ref('users/' + phone).set({
+                        phone: String(phone),      
+                        password: String(pass),
+                        referCode: String(invite), 
+                        myReferCode: myGeneratedCode, // এই কোডটিই অন্য কেউ রেফার হিসেবে ব্যবহার করবে
+                        balance: 150,              
+                        planActive: "false",       
+                        joinedAt: new Date().toLocaleString()
+                    }).then(() => {
+                        localStorage.setItem('userPhone', phone);
+                        alert("নিবন্ধন সফল! আপনার রেফার কোড: " + myGeneratedCode);
+                        window.location.href = "login.html"; 
+                    });
+                }
+            });
+        };
+    </script>
+</body>
+</html>

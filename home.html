@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --royal-gold: #fcc419; --deep-gold: #b8860b; --bg-black: #050505; --card-bg: #1a1a1a; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-black); color: white; margin: 0; padding-bottom: 80px; }
+        
+        /* Top Navigation */
+        .top-nav { background: #111; padding: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
+        .brand-logo { color: var(--royal-gold); font-weight: bold; font-size: 18px; }
+        .balance-box { background: rgba(252, 196, 25, 0.1); border: 1px solid var(--royal-gold); padding: 5px 15px; border-radius: 20px; font-size: 14px; }
+
+        /* Banner */
+        .banner { width: 100%; height: 180px; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .banner h2 { font-size: 20px; color: var(--royal-gold); text-shadow: 2px 2px 10px black; padding: 0 20px; }
+
+        /* Investment Cards */
+        .container { padding: 15px; }
+        .plan-card { background: var(--card-bg); border-radius: 12px; margin-bottom: 20px; overflow: hidden; display: flex; flex-direction: column; border: 0.5px solid #333; text-decoration: none; }
+        .card-top { display: flex; height: 100px; }
+        .plan-img { width: 120px; object-fit: cover; }
+        .plan-info { flex: 1; padding: 10px; background: white; color: #333; }
+        .plan-title { font-size: 15px; font-weight: bold; color: #007bff; display: flex; justify-content: space-between; }
+        .cycle-text { font-size: 11px; color: #666; font-weight: normal; }
+        
+        .profit-row { display: flex; justify-content: space-around; margin-top: 10px; border-top: 1px solid #eee; padding-top: 8px; }
+        .profit-item { text-align: center; }
+        .p-label { font-size: 10px; color: #888; display: block; }
+        .p-amount { font-size: 13px; font-weight: bold; color: #007bff; }
+
+        .card-bottom { background: #8bc34a; padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; color: white; font-weight: bold; }
+        .price-tag { font-size: 16px; }
+
+        /* Bottom Nav */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #111; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #333; }
+        .nav-item { color: #888; text-decoration: none; font-size: 12px; display: flex; flex-direction: column; align-items: center; }
+        .nav-item.active { color: var(--royal-gold); }
+        .nav-icon { font-size: 20px; margin-bottom: 4px; }
+        a { text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <div class="brand-logo">ELECTRICITY</div>
+        <div class="balance-box">ব্যালেন্স: ৳ <span id="userBalance">...</span></div>
+    </div>
+
+    <div class="banner">
+        <h2>বিশ্বের শক্তিতে বিনিয়োগ করুন <br> <span style="font-size: 14px; color: #fff;">ভবিষ্যৎ হোক উজ্জ্বল</span></h2>
+    </div>
+
+    <div class="container">
+        
+        <a href="300.html">
+            <div class="plan-card">
+                <div class="card-top">
+                    <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=60" class="plan-img">
+                    <div class="plan-info">
+                        <div class="plan-title">সৌর শক্তি <span class="cycle-text">চক্র: ৩০ দিন</span></div>
+                        <div class="profit-row">
+                            <div class="profit-item"><span class="p-label">দিনের লাভ</span><span class="p-amount">৳ ১৬৫</span></div>
+                            <div class="profit-item"><span class="p-label">মোট লাভ</span><span class="p-amount">৳ ৪,৯৫০</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-bottom"><span>মূল্য</span><span class="price-tag">৳ ৩০০</span></div>
+            </div>
+        </a>
+
+        <a href="3000.html">
+            <div class="plan-card">
+                <div class="card-top">
+                    <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=60" class="plan-img">
+                    <div class="plan-info">
+                        <div class="plan-title">বায়ু কল <span class="cycle-text">চক্র: ৩০ দিন</span></div>
+                        <div class="profit-row">
+                            <div class="profit-item"><span class="p-label">দিনের লাভ</span><span class="p-amount">৳ ১,৪৪০</span></div>
+                            <div class="profit-item"><span class="p-label">মোট লাভ</span><span class="p-amount">৳ ৪৩,২০০</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-bottom"><span>মূল্য</span><span class="price-tag">৳ ৩,০০০</span></div>
+            </div>
+        </a>
+
+        <a href="10000.html">
+            <div class="plan-card">
+                <div class="card-top">
+                    <img src="https://images.unsplash.com/photo-1513828583688-c52646db42da?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=60" class="plan-img">
+                    <div class="plan-info">
+                        <div class="plan-title">পাওয়ার গ্রিড <span class="cycle-text">চক্র: ৩০ দিন</span></div>
+                        <div class="profit-row">
+                            <div class="profit-item"><span class="p-label">দিনের লাভ</span><span class="p-amount">৳ ৪,৪৫০</span></div>
+                            <div class="profit-item"><span class="p-label">মোট লাভ</span><span class="p-amount">৳ ১,৩৩,৫০০</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-bottom"><span>মূল্য</span><span class="price-tag">৳ ১০,০০০</span></div>
+            </div>
+        </a>
+
+        <a href="50000.html">
+            <div class="plan-card">
+                <div class="card-top">
+                    <img src="https://images.unsplash.com/photo-1544144433-d50aff500b91?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=60" class="plan-img">
+                    <div class="plan-info">
+                        <div class="plan-title">বিদ্যুৎ কেন্দ্র <span class="cycle-text">চক্র: ৩০ দিন</span></div>
+                        <div class="profit-row">
+                            <div class="profit-item"><span class="p-label">দিনের লাভ</span><span class="p-amount">৳ ২৪,৮০০</span></div>
+                            <div class="profit-item"><span class="p-label">মোট লাভ</span><span class="p-amount">৳ ৭,৪৪,০০০</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-bottom"><span>মূল্য</span><span class="price-tag">৳ ৫০,০০০</span></div>
+            </div>
+        </a>
+
+        <a href="100000.html">
+            <div class="plan-card">
+                <div class="card-top">
+                    <img src="https://images.unsplash.com/photo-1464012356351-2dec936f338b?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=60" class="plan-img">
+                    <div class="plan-info">
+                        <div class="plan-title">মেগা প্রোজেক্ট <span class="cycle-text">চক্র: ৩০ দিন</span></div>
+                        <div class="profit-row">
+                            <div class="profit-item"><span class="p-label">দিনের লাভ</span><span class="p-amount">৳ ৫৮,৯০০</span></div>
+                            <div class="profit-item"><span class="p-label">মোট লাভ</span><span class="p-amount">৳ ১৭,৬৭,০০০</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-bottom"><span>মূল্য</span><span class="price-tag">৳ ১,০০,০০০</span></div>
+            </div>
+        </a>
+
+    </div>
+
+    <div class="bottom-nav">
+        <a href="home.html" class="nav-item active"><span class="nav-icon">🏠</span><span>হোম</span></a>
+        <a href="records.html" class="nav-item"><span class="nav-icon">📋</span><span>রেকর্ডস</span></a>
+        <a href="profile.html" class="nav-item"><span class="nav-icon">👤</span><span>আমার</span></a>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+        // তোর Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyANWxCdWbcybuY60iSiNYtFfzY8zHKQCmE",
+            authDomain: "biddut-grid-2a476.firebaseapp.com",
+            databaseURL: "https://biddut-grid-2a476-default-rtdb.firebaseio.com",
+            projectId: "biddut-grid-2a476",
+            appId: "1:598209087772:web:400dae852569f1b27a52d9"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        window.onload = function() {
+            // ১. সেশন চেক (লগইন করা না থাকলে সোজা লগইন পেজে পাঠাবে)
+            let userPhone = localStorage.getItem('userPhone');
+            if (!userPhone) {
+                window.location.replace("login.html");
+                return;
+            }
+
+            // ২. রিয়েলটাইম ব্যালেন্স আপডেট
+            db.ref('users/' + userPhone).on('value', (snapshot) => {
+                const balanceDisplay = document.getElementById('userBalance');
+                if (snapshot.exists()) {
+                    let balance = snapshot.val().balance || 0;
+                    balanceDisplay.innerText = parseFloat(balance).toFixed(2);
+                } else {
+                    balanceDisplay.innerText = "0.00";
+                }
+            });
+        };
+    </script>
+
+</body>
+</html>
