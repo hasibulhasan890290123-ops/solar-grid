@@ -99,32 +99,57 @@
         <p>আপনার রেফারেল লিঙ্কটি শেয়ার করুন এবং আপনার গ্রিডে নতুন মেম্বার যুক্ত হলে বোনাস কমিশন পান।</p>
 
         <div class="link-box" id="shareLink">
-            https://my-electric-grid.netlify.app/?ref=<span id="refId">...</span>
+            https://hasibulhasan890290123-ops.github.io/solar-grid/register.html?ref=<span id="refId">...</span>
         </div>
 
         <button class="copy-btn" onclick="copyFullLink()">লিঙ্ক কপি করুন</button>
 
         <div class="refer-info">
             <div style="font-size: 12px; color: #888;">আপনার ইনভাইট কোড</div>
-            <div id="myCode" style="font-size: 20px; font-weight: bold; color: var(--gold);">------</div>
+            <div id="myCode" style="font-size: 20px; font-weight: bold; color: var(--gold);">Loading...</div>
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
     <script>
+        // তোর Firebase কনফিগ
+        const firebaseConfig = {
+            apiKey: "AIzaSyANWxCdWbcybuY60iSiNYtFfzY8zHKQCmE",
+            authDomain: "biddut-grid-2a476.firebaseapp.com",
+            databaseURL: "https://biddut-grid-2a476-default-rtdb.firebaseio.com",
+            projectId: "biddut-grid-2a476",
+            appId: "1:598209087772:web:400dae852569f1b27a52d9"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
         window.onload = function() {
-            let userPhone = localStorage.getItem('userPhone') || localStorage.getItem('loggedInUser');
-            let savedReferCode = localStorage.getItem('referCode_' + userPhone);
-            const siteURL = "my-electric-grid.netlify.app";
+            // লগইন করা ইউজারের ফোন নম্বর লোকাল স্টোরেজ থেকে নিবে
+            let userPhone = localStorage.getItem('userPhone');
+            const siteURL = "hasibulhasan890290123-ops.github.io/solar-grid";
             
-            if (savedReferCode) {
-                document.getElementById('myCode').innerText = savedReferCode;
-                document.getElementById('refId').innerText = savedReferCode;
-                
-                // লিঙ্ক অনুযায়ী QR কোড আপডেট
-                let fullLink = `https://${siteURL}/?ref=${savedReferCode}`;
-                document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${fullLink}`;
+            if (userPhone) {
+                // ডাটাবেস থেকে ইউজারের সেই ৬ ডিজিটের র‍্যান্ডম কোডটি (myReferCode) খুঁজে বের করা
+                db.ref('users/' + userPhone).once('value').then((snap) => {
+                    let userData = snap.val();
+                    if (userData && userData.myReferCode) {
+                        let code = userData.myReferCode;
+                        
+                        // পেজে কোড এবং লিঙ্ক আপডেট
+                        document.getElementById('myCode').innerText = code;
+                        document.getElementById('refId').innerText = code;
+                        
+                        // QR কোড জেনারেট
+                        let fullLink = `https://${siteURL}/register.html?ref=${code}`;
+                        document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(fullLink)}`;
+                    } else {
+                        document.getElementById('myCode').innerText = "Not Set";
+                    }
+                });
             } else {
-                document.getElementById('myCode').innerText = "Login Required";
+                document.getElementById('myCode').innerText = "Login First";
                 document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://${siteURL}`;
             }
         };
